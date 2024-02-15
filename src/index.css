@@ -1,0 +1,23 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Amatic+SC:wght@700&display=swap");
+
+body {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Poppins", sans-serif;
+  scroll-behavior: smooth;
+  background: #333;
+}
+input,
+textarea {
+  color: #000;
+  padding: 10px;
+  border-radius: 5px;
+}
+link {
+  text-decoration: none;
+}
+.cursive {
+  font-family: "Amatic SC", cursive;
+  font-weight: 700;
+}

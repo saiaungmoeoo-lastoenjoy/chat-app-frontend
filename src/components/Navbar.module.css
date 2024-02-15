@@ -1,0 +1,16 @@
+.container {
+  display: flex;
+  min-width: 400px;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem;
+  color: #fff;
+}
+.logo {
+  padding: 5px 15px;
+  border: 1px solid #fff;
+  border-radius: 10px;
+  border-bottom-right-radius: 0;
+  border-top-left-radius: 0;
+  text-transform: uppercase;
+}
