@@ -1,9 +1,12 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import css from "./Chat.module.css";
 
 const Chat = ({ socket, username, room }) => {
   const [currentMessage, setCurrentMessage] = useState("");
   const [messageList, setMessageList] = useState([]);
+  const messagesRef = useRef(null);
 
   const sendMessage = async () => {
     if (currentMessage !== "") {
@@ -17,6 +20,7 @@ const Chat = ({ socket, username, room }) => {
       await socket.emit("send_message", messageData);
       setMessageList((list) => [...list, messageData]);
       setCurrentMessage("");
+      messagesRef.current.scrollTop = messagesRef.current.scrollHeight;
     }
   };
 
@@ -30,14 +34,27 @@ const Chat = ({ socket, username, room }) => {
     socket.on("receive_message", (data) => {
       setMessageList((list) => [...list, data]);
     });
+    socket.on("join_room", (data) => {
+      return toast.success(`${data.username} joined this room id ${data.room}`, {
+        position: "top-center",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: false,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+      });
+    });
   }, [socket]);
 
   return (
     <div className={css.container}>
+      <ToastContainer position="top-center" autoClose={2000} hideProgressBar={false} newestOnTop={false} closeOnClick rtl={false} pauseOnFocusLoss draggable pauseOnHover={false} theme="light" />
       <div className={css.header}>
         <p>Live Chat</p>
       </div>
-      <div className={css.chatbody}>
+      <div className={css.chatbody} ref={messagesRef}>
         {messageList.map((list, i) => (
           <div key={i} className={css.message}>
             <div>
@@ -45,8 +62,6 @@ const Chat = ({ socket, username, room }) => {
                 className={css.content}
                 style={{
                   flexDirection: username === list.author ? "row-reverse" : "row",
-                  // justifyContent:
-                  //   username === list.author ? "flex-end" : "flex-start",
                   marginLeft: username === list.author ? "auto" : "0",
                 }}
               >

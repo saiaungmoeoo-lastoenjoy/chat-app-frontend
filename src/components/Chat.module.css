@@ -14,8 +14,9 @@
   text-align: center;
 }
 .chatbody {
+  padding-left: 1rem;
   overflow-y: scroll;
-  height: 250px;
+  height: 350px;
   background-color: #ffffff;
   border-radius: 5px;
   color: #000;
