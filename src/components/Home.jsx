@@ -6,8 +6,6 @@ import Chat from "./Chat";
 
 const socket = io.connect(process.env.REACT_APP_BACKEND_URL);
 
-console.log(process.env.REACT_APP_BACKEND_URL);
-
 const Home = () => {
   const [username, setUsername] = useState("");
   const [room, setRoom] = useState("");

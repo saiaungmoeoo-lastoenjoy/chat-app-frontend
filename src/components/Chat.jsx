@@ -1,11 +1,13 @@
 import React, { useEffect, useState, useRef } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import Picker from "emoji-picker-react";
 import css from "./Chat.module.css";
 
 const Chat = ({ socket, username, room }) => {
   const [currentMessage, setCurrentMessage] = useState("");
   const [messageList, setMessageList] = useState([]);
+  const [showPicker, setShowPicker] = useState(false);
   const messagesRef = useRef(null);
 
   const sendMessage = async () => {
@@ -52,7 +54,9 @@ const Chat = ({ socket, username, room }) => {
     <div className={css.container}>
       <ToastContainer position="top-center" autoClose={2000} hideProgressBar={false} newestOnTop={false} closeOnClick rtl={false} pauseOnFocusLoss draggable pauseOnHover={false} theme="light" />
       <div className={css.header}>
-        <p>Live Chat</p>
+        <p>
+          {username}'s chat at room {room}
+        </p>
       </div>
       <div className={css.chatbody} ref={messagesRef}>
         {messageList.map((list, i) => (
@@ -65,7 +69,7 @@ const Chat = ({ socket, username, room }) => {
                   marginLeft: username === list.author ? "auto" : "0",
                 }}
               >
-                <span className={css.meta}>{list.author}</span>
+                <span className={css.meta}>{list.author.slice(0, 5)}</span>
                 <p>{list.message}</p>
                 <span>{list.date}</span>
               </div>
@@ -74,8 +78,20 @@ const Chat = ({ socket, username, room }) => {
         ))}
       </div>
       <div className={css.footer}>
-        <input type="text" value={currentMessage} placeholder="hey..." onChange={(e) => setCurrentMessage(e.target.value)} onKeyDown={handleKeyDown} />
-        <button onClick={sendMessage}>&#9658;</button>
+        <div className={css.inputContainer}>
+          {showPicker && (
+            <Picker
+              onEmojiClick={(emojiObject) => {
+                setCurrentMessage((prevMsg) => prevMsg + emojiObject.emoji);
+                setShowPicker(false);
+              }}
+              className={css.emoji}
+            />
+          )}
+          <input type="text" value={currentMessage} placeholder="hey..." onChange={(e) => setCurrentMessage(e.target.value)} onKeyDown={handleKeyDown} />
+          <img className={css.icon} src="https://icons.getbootstrap.com/assets/icons/emoji-smile.svg" onClick={() => setShowPicker((val) => !val)} alt="" />
+          <button onClick={sendMessage}>&#9658;</button>
+        </div>
       </div>
     </div>
   );
